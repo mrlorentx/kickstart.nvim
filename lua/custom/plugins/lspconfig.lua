@@ -3,7 +3,6 @@ return {
   dependencies = { 'williamboman/mason-lspconfig', 'olexsmir/gopher.nvim' },
   config = function()
     local lspconfig = require 'lspconfig'
-    local util = require 'lspconfig/util'
 
     -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
     local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -27,18 +26,31 @@ return {
     -- Ensure that the servers below are installed
     local servers = {
       ts_ls = {},
+      denols = {},
       bashls = {},
       dockerls = {},
       vimls = {},
       cssls = {},
       html = {},
       eslint = {},
+      elixirls = {},
       lua_ls = {
         Lua = {
           workspace = { checkThirdParty = false },
           telemetry = { enable = false },
         },
       },
+    }
+
+    lspconfig.denols.setup {
+      on_attach = on_attach,
+      root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
+    }
+
+    lspconfig.ts_ls.setup {
+      on_attach = on_attach,
+      root_dir = lspconfig.util.root_pattern 'package.json',
+      single_file_support = false,
     }
 
     mason_lspconfig.setup {
@@ -113,7 +125,6 @@ return {
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
 
         -- make gq work with lsp
-        vim.api.nvim_buf_set_option(ev.buf, 'formatexpr', '')
       end,
     })
 
