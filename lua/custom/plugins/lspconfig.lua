@@ -26,7 +26,6 @@ return {
     -- Ensure that the servers below are installed
     local servers = {
       ts_ls = {},
-      denols = {},
       bashls = {},
       dockerls = {},
       vimls = {},
@@ -34,17 +33,13 @@ return {
       html = {},
       eslint = {},
       elixirls = {},
+      gopls = {},
       lua_ls = {
         Lua = {
           workspace = { checkThirdParty = false },
           telemetry = { enable = false },
         },
       },
-    }
-
-    lspconfig.denols.setup {
-      on_attach = on_attach,
-      root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
     }
 
     lspconfig.ts_ls.setup {
